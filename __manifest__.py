@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Warung Lakku Loyalty & Affiliate',
-    'version': '17.0.1.1.0',
+    'version': '17.0.1.1.3',
     'category': 'Website/Website',
     'summary': 'Point-to-voucher exchange + simple share-to-sosmed affiliate system (click log, order log, commission log)',
     'description': """

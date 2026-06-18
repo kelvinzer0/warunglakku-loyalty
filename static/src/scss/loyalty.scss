@@ -85,6 +85,10 @@ $wl-font-body:     'Inter', sans-serif;
             line-height: 1.1;
             margin: 0 0 12px;
             letter-spacing: -0.01em;
+            // FIX: theme_warunglakku has `h1, h2, ..., h6 { color: var(--wl-maroon-dark) !important; }`
+            // which overrides our specificity. We need !important here too.
+            color: #fff !important;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.18);
         }
 
         p {
@@ -313,7 +317,7 @@ $wl-font-body:     'Inter', sans-serif;
             letter-spacing: 0.08em;
             text-transform: uppercase;
             color: $wl-text-muted;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
         }
 
         .wl_affiliate_code_value code {
@@ -323,18 +327,28 @@ $wl-font-body:     'Inter', sans-serif;
             color: $wl-maroon-dark;
             letter-spacing: 0.08em;
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
         }
 
         .wl_affiliate_code_url {
+            // FIX: URL was wrapping with stray whitespace from XML
+            // template indentation. Now rendered as single string.
+            // Use display:block + word-break + smaller font so it
+            // fits the box width cleanly without forced mid-URL breaks.
             font-family: 'SFMono-Regular', Consolas, monospace;
             font-size: 0.78rem;
             color: $wl-text-muted;
             word-break: break-all;
-            padding: 6px 10px;
-            background: rgba(255, 255, 255, 0.6);
+            overflow-wrap: anywhere;
+            padding: 8px 12px;
+            background: #fff;
+            border: 1px solid rgba($wl-border, 0.8);
             border-radius: 6px;
-            margin-bottom: 6px;
+            line-height: 1.5;
+            display: block;
+            // Treat URL as one continuous inline flow — QWeb now
+            // emits it without internal newlines, so this preserves
+            // the URL intact and only breaks if it exceeds the box.
         }
 
         > small {
@@ -342,7 +356,7 @@ $wl-font-body:     'Inter', sans-serif;
             font-size: 0.76rem;
             color: $wl-text-muted;
             line-height: 1.45;
-            margin-top: 6px;
+            margin-top: 10px;
         }
     }
 
@@ -442,53 +456,89 @@ $wl-font-body:     'Inter', sans-serif;
     }
 
     .wl_tier_card {
-        background: linear-gradient(135deg, #fffdf5 0%, #fffaf0 100%);
-        border: 1px solid $wl-border;
-        border-radius: 14px;
-        padding: 22px 18px 18px;
+        // FIX: Was looking like a "quote box" — flat, only top 4px
+        // yellow strip, asymmetric padding. Redesigned as proper
+        // elevated card with: symmetric padding, subtle shadow,
+        // full border, maroon accent ribbon (top), and clearer
+        // visual hierarchy (voucher value -> cost badge -> CTA).
+        background: #ffffff;
+        border: 1px solid #ece2cf;
+        border-radius: 16px;
+        padding: 26px 22px 22px;
         text-align: center;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        transition: transform 0.2s ease, box-shadow 0.2s ease,
+                    border-color 0.2s ease;
         position: relative;
         overflow: hidden;
+        box-shadow: 0 1px 2px rgba(31, 31, 31, 0.04),
+                    0 4px 12px rgba(122, 12, 20, 0.05);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 220px;
 
         &::before {
+            // Top accent ribbon — now maroon-to-yellow gradient
+            // (was: pure yellow strip — looked like a quote marker).
             content: '';
             position: absolute;
             top: 0; left: 0; right: 0;
-            height: 4px;
+            height: 5px;
             background: linear-gradient(90deg,
-                $wl-yellow 0%, #ffec8b 100%);
+                $wl-maroon 0%, $wl-maroon-dark 40%, $wl-yellow 100%);
+        }
+
+        &::after {
+            // Subtle corner decoration (top-right circle)
+            content: '';
+            position: absolute;
+            top: -30px; right: -30px;
+            width: 90px; height: 90px;
+            border-radius: 50%;
+            background: rgba($wl-yellow, 0.10);
+            pointer-events: none;
         }
 
         &:not(.wl_tier_disabled):hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(122, 12, 20, 0.12);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(31, 31, 31, 0.06),
+                        0 12px 28px rgba(122, 12, 20, 0.12);
+            border-color: rgba($wl-maroon, 0.3);
         }
 
         &.wl_tier_disabled {
-            opacity: 0.78;
+            background: #faf7f0;
+            opacity: 0.85;
+
+            &::before {
+                background: linear-gradient(90deg, #ccc 0%, #bbb 100%);
+            }
         }
 
         .wl_tier_value {
-            margin-bottom: 6px;
+            margin-bottom: 12px;
+            position: relative;
+            z-index: 1;
 
             .wl_tier_currency {
-                font-size: 0.85rem;
+                font-size: 0.9rem;
                 font-weight: 600;
                 color: $wl-text-muted;
-                margin-right: 3px;
+                margin-right: 4px;
                 vertical-align: top;
                 position: relative;
-                top: 4px;
+                top: 6px;
             }
 
             .wl_tier_amount {
                 font-family: $wl-font-head;
                 font-weight: 700;
-                font-size: 2rem;
+                font-size: 2.4rem;
                 color: $wl-maroon-dark;
                 line-height: 1;
                 font-variant-numeric: tabular-nums;
+                letter-spacing: -0.01em;
             }
         }
 
@@ -496,16 +546,18 @@ $wl-font-body:     'Inter', sans-serif;
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            font-size: 0.86rem;
+            font-size: 0.84rem;
             font-weight: 600;
-            color: $wl-text;
+            color: $wl-maroon-dark;
             background: $wl-yellow-tint;
-            border: 1px solid rgba($wl-yellow, 0.3);
-            padding: 4px 12px;
+            border: 1px solid rgba($wl-yellow, 0.4);
+            padding: 6px 14px;
             border-radius: 999px;
-            margin-bottom: 14px;
+            margin-bottom: 18px;
+            position: relative;
+            z-index: 1;
 
-            i { color: $wl-yellow; }
+            i { color: $wl-yellow; font-size: 0.85rem; }
         }
 
         .wl_tier_btn {
@@ -514,38 +566,46 @@ $wl-font-body:     'Inter', sans-serif;
             justify-content: center;
             gap: 6px;
             width: 100%;
-            padding: 10px 14px;
-            border-radius: 8px;
+            padding: 11px 16px;
+            border-radius: 10px;
             font-family: $wl-font-head;
             font-weight: 600;
             font-size: 0.88rem;
             cursor: pointer;
             border: 0;
             text-decoration: none;
-            transition: background 0.15s ease, transform 0.1s ease;
+            transition: background 0.15s ease, transform 0.1s ease,
+                        box-shadow 0.15s ease;
+            position: relative;
+            z-index: 1;
 
             background: $wl-maroon;
             color: #fff;
+            box-shadow: 0 2px 6px rgba(122, 12, 20, 0.18);
 
             &:hover:not(:disabled) {
                 background: $wl-maroon-dark;
                 color: #fff;
                 transform: translateY(-1px);
+                box-shadow: 0 4px 10px rgba(122, 12, 20, 0.28);
             }
 
             &:disabled {
-                background: #e0d8c8;
+                background: #ece6da;
                 color: $wl-text-muted;
                 cursor: not-allowed;
+                box-shadow: none;
             }
 
             &.wl_tier_btn_login {
                 background: $wl-yellow;
                 color: $wl-maroon-dark;
+                box-shadow: 0 2px 6px rgba(245, 196, 0, 0.25);
 
                 &:hover {
                     background: #ffd91a;
                     color: $wl-maroon-dark;
+                    box-shadow: 0 4px 10px rgba(245, 196, 0, 0.35);
                 }
             }
         }

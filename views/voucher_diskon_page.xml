@@ -184,10 +184,7 @@
                                         <div class="wl_affiliate_code_value">
                                             <code t-esc="partner.affiliate_code or '-'"/>
                                         </div>
-                                        <div class="wl_affiliate_code_url">
-                                            <t t-esc="base_url"/>
-                                            /aff/<t t-esc="partner.affiliate_code or ''"/>?p=&lt;id_produk&gt;
-                                        </div>
+                                        <div class="wl_affiliate_code_url"><t t-esc="'%s/aff/%s?p=&lt;id_produk&gt;' % ((base_url or '').rstrip('/'), partner.affiliate_code or '')"/></div>
                                         <small>
                                             Bagikan link ini di status
                                             WA, story IG, atau tweet.
