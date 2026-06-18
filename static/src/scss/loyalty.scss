@@ -1,0 +1,755 @@
+// ============================================================
+// Warung Lakku Loyalty & Affiliate — frontend styles
+//   - /voucher-diskon page
+//   - product page affiliate share widget
+// ============================================================
+
+// ----- Brand colors (mirror theme_warunglakku) -----
+$wl-maroon:        #7a0c14;
+$wl-maroon-dark:   #5a080e;
+$wl-maroon-darker: #44060b;
+$wl-yellow:        #f5c400;
+$wl-yellow-soft:   #fff8d8;
+$wl-yellow-tint:   rgba(245, 196, 0, 0.10);
+$wl-text:          #1f1f1f;
+$wl-text-muted:    #6c757d;
+$wl-border:        #f0e6d2;
+$wl-green:         #28a745;
+$wl-red:           #c0392b;
+$wl-bg:            #fdfbf5;
+$wl-bg-2:          #ffffff;
+
+$wl-font-head:     'Poppins', sans-serif;
+$wl-font-body:     'Inter', sans-serif;
+
+// ============================================================
+// /voucher-diskon page
+// ============================================================
+
+.wl_voucher_page {
+    background: $wl-bg;
+    font-family: $wl-font-body;
+    color: $wl-text;
+
+    // ----- Header band -----
+    .wl_voucher_header {
+        background: linear-gradient(135deg,
+            $wl-maroon 0%, $wl-maroon-dark 60%, $wl-maroon-darker 100%);
+        color: #fff;
+        padding: 48px 0 56px;
+        position: relative;
+        overflow: hidden;
+
+        &::after {
+            content: '';
+            position: absolute;
+            right: -80px;
+            top: -80px;
+            width: 280px;
+            height: 280px;
+            border-radius: 50%;
+            background: rgba($wl-yellow, 0.08);
+        }
+    }
+
+    .wl_voucher_header_inner {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 32px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .wl_voucher_header_text {
+        flex: 1 1 400px;
+
+        .wl_voucher_eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: $wl-yellow;
+            margin-bottom: 12px;
+
+            i { font-size: 0.95rem; }
+        }
+
+        h1 {
+            font-family: $wl-font-head;
+            font-weight: 700;
+            font-size: 2.4rem;
+            line-height: 1.1;
+            margin: 0 0 12px;
+            letter-spacing: -0.01em;
+        }
+
+        p {
+            font-size: 1rem;
+            line-height: 1.55;
+            color: rgba(255, 255, 255, 0.86);
+            margin: 0;
+            max-width: 540px;
+        }
+    }
+
+    .wl_voucher_balance {
+        flex: 0 0 240px;
+        background: rgba(255, 255, 255, 0.10);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 16px;
+        padding: 22px 24px;
+        text-align: center;
+        backdrop-filter: blur(4px);
+
+        .wl_voucher_balance_label {
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 6px;
+        }
+
+        .wl_voucher_balance_value {
+            font-family: $wl-font-head;
+            font-weight: 700;
+            font-size: 2.6rem;
+            line-height: 1;
+            color: $wl-yellow;
+            display: flex;
+            align-items: baseline;
+            justify-content: center;
+            gap: 6px;
+
+            .wl_voucher_balance_unit {
+                font-size: 0.95rem;
+                font-weight: 500;
+                color: rgba(255, 255, 255, 0.7);
+                text-transform: lowercase;
+            }
+        }
+
+        .wl_voucher_login_btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: $wl-yellow;
+            color: $wl-maroon-dark;
+            font-weight: 600;
+            padding: 10px 18px;
+            border-radius: 999px;
+            text-decoration: none;
+            font-size: 0.88rem;
+            transition: transform 0.15s ease;
+
+            &:hover {
+                color: $wl-maroon-dark;
+                transform: translateY(-1px);
+            }
+        }
+    }
+
+    // ----- Flash messages -----
+    .wl_voucher_flash {
+        margin-top: 24px;
+        margin-bottom: 0;
+        border-radius: 12px;
+        padding: 16px 20px;
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+
+        &_success {
+            background: #e8f8ec;
+            border-left: 4px solid $wl-green;
+        }
+        &_error {
+            background: #fdecea;
+            border-left: 4px solid $wl-red;
+        }
+
+        .wl_voucher_flash_icon {
+            font-size: 1.6rem;
+            line-height: 1;
+
+            .wl_voucher_flash_success & { color: $wl-green; }
+            .wl_voucher_flash_error &   { color: $wl-red; }
+        }
+
+        .wl_voucher_flash_body {
+            flex: 1;
+
+            strong {
+                font-family: $wl-font-head;
+                font-size: 1rem;
+                display: block;
+                margin-bottom: 4px;
+            }
+
+            small {
+                color: $wl-text-muted;
+                font-size: 0.78rem;
+            }
+        }
+
+        .wl_voucher_flash_code code {
+            display: inline-block;
+            background: $wl-maroon-dark;
+            color: $wl-yellow;
+            font-family: 'SFMono-Regular', Consolas, monospace;
+            font-size: 1.05rem;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 6px;
+            margin: 4px 0 6px;
+            letter-spacing: 0.05em;
+        }
+    }
+
+    // ----- Main content layout -----
+    .wl_voucher_main {
+        padding: 40px 0 60px;
+    }
+
+    .wl_voucher_section {
+        background: $wl-bg-2;
+        border: 1px solid $wl-border;
+        border-radius: 16px;
+        padding: 28px 28px 24px;
+        margin-bottom: 24px;
+    }
+
+    .wl_voucher_section_title {
+        font-family: $wl-font-head;
+        font-weight: 600;
+        font-size: 1.25rem;
+        color: $wl-maroon-dark;
+        margin: 0 0 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        i { color: $wl-yellow; }
+    }
+
+    // ----- Steps -----
+    .wl_voucher_steps {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 24px;
+
+        li {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            padding: 14px 0;
+            border-bottom: 1px solid $wl-border;
+
+            &:last-child { border-bottom: 0; }
+        }
+
+        .wl_voucher_step_num {
+            flex: 0 0 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: $wl-maroon;
+            color: $wl-yellow;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: $wl-font-head;
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        .wl_voucher_step_body {
+            flex: 1;
+
+            strong {
+                font-family: $wl-font-head;
+                font-weight: 600;
+                font-size: 0.98rem;
+                display: block;
+                color: $wl-text;
+                margin-bottom: 3px;
+            }
+
+            p {
+                margin: 0;
+                font-size: 0.88rem;
+                line-height: 1.5;
+                color: $wl-text-muted;
+
+                a {
+                    color: $wl-maroon;
+                    text-decoration: underline;
+                }
+                em {
+                    color: $wl-maroon;
+                    font-style: normal;
+                    font-weight: 500;
+                }
+            }
+        }
+    }
+
+    // ----- Affiliate code box -----
+    .wl_affiliate_code_box {
+        background: $wl-yellow-tint;
+        border: 1px solid $wl-border;
+        border-left: 4px solid $wl-yellow;
+        border-radius: 10px;
+        padding: 16px 18px;
+        margin-top: 8px;
+
+        .wl_affiliate_code_label {
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: $wl-text-muted;
+            margin-bottom: 6px;
+        }
+
+        .wl_affiliate_code_value code {
+            font-family: 'SFMono-Regular', Consolas, monospace;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: $wl-maroon-dark;
+            letter-spacing: 0.08em;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .wl_affiliate_code_url {
+            font-family: 'SFMono-Regular', Consolas, monospace;
+            font-size: 0.78rem;
+            color: $wl-text-muted;
+            word-break: break-all;
+            padding: 6px 10px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 6px;
+            margin-bottom: 6px;
+        }
+
+        > small {
+            display: block;
+            font-size: 0.76rem;
+            color: $wl-text-muted;
+            line-height: 1.45;
+            margin-top: 6px;
+        }
+    }
+
+    // ----- Recent commission list -----
+    .wl_recent_comm {
+        margin-top: 24px;
+
+        .wl_recent_comm_title {
+            font-family: $wl-font-head;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: $wl-text;
+            margin: 0 0 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            i { color: $wl-yellow; }
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+
+            li {
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                gap: 6px 12px;
+                padding: 8px 0;
+                border-bottom: 1px dashed $wl-border;
+                font-size: 0.84rem;
+
+                &:last-child { border-bottom: 0; }
+
+                .wl_comm_points {
+                    font-weight: 700;
+                    color: $wl-green;
+                    font-variant-numeric: tabular-nums;
+                    min-width: 70px;
+                }
+
+                .wl_comm_reason {
+                    flex: 1;
+                    color: $wl-text;
+                    font-size: 0.82rem;
+                }
+
+                .wl_comm_date {
+                    color: $wl-text-muted;
+                    font-size: 0.74rem;
+                    font-variant-numeric: tabular-nums;
+                }
+            }
+        }
+    }
+
+    // ----- Login CTA (when not logged in) -----
+    .wl_login_cta {
+        background: #f6f4ee;
+        border: 1px dashed $wl-border;
+        border-radius: 10px;
+        padding: 18px;
+        text-align: center;
+        margin-top: 8px;
+
+        i {
+            font-size: 1.5rem;
+            color: $wl-text-muted;
+            margin-bottom: 8px;
+        }
+
+        p {
+            font-size: 0.86rem;
+            color: $wl-text-muted;
+            margin: 0;
+
+            a {
+                color: $wl-maroon;
+                font-weight: 600;
+                text-decoration: underline;
+            }
+        }
+    }
+
+    // ----- Tier grid -----
+    .wl_tiers_grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        margin-bottom: 8px;
+
+        @media (max-width: 575.98px) {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .wl_tier_card {
+        background: linear-gradient(135deg, #fffdf5 0%, #fffaf0 100%);
+        border: 1px solid $wl-border;
+        border-radius: 14px;
+        padding: 22px 18px 18px;
+        text-align: center;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        position: relative;
+        overflow: hidden;
+
+        &::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+            background: linear-gradient(90deg,
+                $wl-yellow 0%, #ffec8b 100%);
+        }
+
+        &:not(.wl_tier_disabled):hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(122, 12, 20, 0.12);
+        }
+
+        &.wl_tier_disabled {
+            opacity: 0.78;
+        }
+
+        .wl_tier_value {
+            margin-bottom: 6px;
+
+            .wl_tier_currency {
+                font-size: 0.85rem;
+                font-weight: 600;
+                color: $wl-text-muted;
+                margin-right: 3px;
+                vertical-align: top;
+                position: relative;
+                top: 4px;
+            }
+
+            .wl_tier_amount {
+                font-family: $wl-font-head;
+                font-weight: 700;
+                font-size: 2rem;
+                color: $wl-maroon-dark;
+                line-height: 1;
+                font-variant-numeric: tabular-nums;
+            }
+        }
+
+        .wl_tier_cost {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.86rem;
+            font-weight: 600;
+            color: $wl-text;
+            background: $wl-yellow-tint;
+            border: 1px solid rgba($wl-yellow, 0.3);
+            padding: 4px 12px;
+            border-radius: 999px;
+            margin-bottom: 14px;
+
+            i { color: $wl-yellow; }
+        }
+
+        .wl_tier_btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            width: 100%;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-family: $wl-font-head;
+            font-weight: 600;
+            font-size: 0.88rem;
+            cursor: pointer;
+            border: 0;
+            text-decoration: none;
+            transition: background 0.15s ease, transform 0.1s ease;
+
+            background: $wl-maroon;
+            color: #fff;
+
+            &:hover:not(:disabled) {
+                background: $wl-maroon-dark;
+                color: #fff;
+                transform: translateY(-1px);
+            }
+
+            &:disabled {
+                background: #e0d8c8;
+                color: $wl-text-muted;
+                cursor: not-allowed;
+            }
+
+            &.wl_tier_btn_login {
+                background: $wl-yellow;
+                color: $wl-maroon-dark;
+
+                &:hover {
+                    background: #ffd91a;
+                    color: $wl-maroon-dark;
+                }
+            }
+        }
+    }
+
+    // ----- Recent exchanges table -----
+    .wl_recent_exchanges {
+        margin-top: 28px;
+
+        .wl_recent_exchanges_title {
+            font-family: $wl-font-head;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: $wl-text;
+            margin: 0 0 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            i { color: $wl-yellow; }
+        }
+    }
+
+    .wl_exchanges_table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.84rem;
+
+        th {
+            text-align: left;
+            font-family: $wl-font-head;
+            font-weight: 600;
+            color: $wl-text-muted;
+            padding: 8px 10px;
+            border-bottom: 2px solid $wl-border;
+            font-size: 0.76rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        td {
+            padding: 10px;
+            border-bottom: 1px solid $wl-border;
+            vertical-align: middle;
+
+            code {
+                font-family: 'SFMono-Regular', Consolas, monospace;
+                background: $wl-maroon-dark;
+                color: $wl-yellow;
+                padding: 2px 8px;
+                border-radius: 4px;
+                font-size: 0.78rem;
+                font-weight: 700;
+                letter-spacing: 0.04em;
+            }
+        }
+
+        tr:last-child td { border-bottom: 0; }
+    }
+
+    .wl_state {
+        display: inline-block;
+        padding: 2px 10px;
+        border-radius: 999px;
+        font-size: 0.72rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+
+        &_issued { background: #e8f8ec; color: $wl-green; }
+        &_used   { background: #e3f2fd; color: #1976d2; }
+        &_void   { background: #fdecea; color: $wl-red; }
+    }
+}
+
+// ============================================================
+// Product page affiliate share widget
+// ============================================================
+
+.wl_aff_share {
+    margin-top: 18px;
+    padding: 16px 18px;
+    background: linear-gradient(135deg, #fffdf5 0%, #fffaf0 100%);
+    border: 1px solid #f0e6d2;
+    border-left: 3px solid $wl-yellow;
+    border-radius: 12px;
+    font-family: $wl-font-body;
+
+    .wl_aff_share_header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-family: $wl-font-head;
+        font-weight: 600;
+        font-size: 0.95rem;
+        color: $wl-maroon-dark;
+        margin-bottom: 10px;
+
+        i { color: $wl-yellow; font-size: 1rem; }
+    }
+
+    .wl_aff_share_body {
+        p.wl_aff_share_hint {
+            font-size: 0.82rem;
+            color: $wl-text-muted;
+            margin: 0 0 10px;
+            line-height: 1.5;
+
+            strong { color: $wl-green; }
+        }
+
+        p.wl_aff_share_login {
+            font-size: 0.84rem;
+            color: $wl-text-muted;
+            margin: 0;
+            line-height: 1.5;
+
+            i {
+                color: $wl-text-muted;
+                margin-right: 4px;
+            }
+            a {
+                color: $wl-maroon;
+                font-weight: 600;
+                text-decoration: underline;
+            }
+        }
+    }
+
+    .wl_aff_share_buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-bottom: 10px;
+    }
+
+    .wl_aff_share_btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 7px 12px;
+        border-radius: 8px;
+        font-size: 0.78rem;
+        font-weight: 600;
+        text-decoration: none;
+        cursor: pointer;
+        border: 1px solid transparent;
+        transition: transform 0.1s ease, background 0.15s ease;
+
+        i { font-size: 0.9rem; }
+
+        &:hover { transform: translateY(-1px); text-decoration: none; }
+
+        &.wl_aff_share_wa {
+            background: #25D366;
+            color: #fff;
+            &:hover { background: #1faa50; color: #fff; }
+        }
+        &.wl_aff_share_fb {
+            background: #1877F2;
+            color: #fff;
+            &:hover { background: #145db8; color: #fff; }
+        }
+        &.wl_aff_share_x {
+            background: #000;
+            color: #fff;
+            &:hover { background: #1a1a1a; color: #fff; }
+        }
+        &.wl_aff_share_copy {
+            background: $wl-maroon-dark;
+            color: #fff;
+            border: 0;
+            &:hover { background: $wl-maroon; color: #fff; }
+            &.wl_aff_copied {
+                background: $wl-green;
+            }
+        }
+
+        span {
+            @media (max-width: 480px) {
+                display: none;
+            }
+        }
+    }
+
+    .wl_aff_share_link_wrap {
+        margin-top: 6px;
+    }
+
+    .wl_aff_share_link_input {
+        width: 100%;
+        font-family: 'SFMono-Regular', Consolas, monospace;
+        font-size: 0.74rem;
+        color: $wl-text-muted;
+        background: #fff;
+        border: 1px solid $wl-border;
+        border-radius: 6px;
+        padding: 6px 10px;
+        outline: none;
+        word-break: break-all;
+
+        &:focus {
+            border-color: $wl-yellow;
+            box-shadow: 0 0 0 2px rgba($wl-yellow, 0.2);
+        }
+    }
+}

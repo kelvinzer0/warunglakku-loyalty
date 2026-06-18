@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!--
+            Add "Voucher Diskon" to the main website nav.
+
+            NOTE: parent_id="website.main_menu" points to the generic
+            default main menu (website_id=False). When this module is
+            installed on a multi-website setup, a post-install hook
+            should also create a copy under each website's main menu
+            (with the correct website_id). For now we rely on the
+            admin to drag the menu into the right place, OR the
+            deploy script creates it directly via XML-RPC.
+
+            noupdate=1 so re-upgrades don't try to recreate it
+            (which would either fail due to the dedupe logic or
+            create duplicates).
+        -->
+        <record id="menu_voucher_diskon" model="website.menu">
+            <field name="name">Voucher Diskon</field>
+            <field name="url">/voucher-diskon</field>
+            <field name="parent_id" ref="website.main_menu"/>
+            <field name="sequence" type="int">25</field>
+            <field name="is_visible" eval="True"/>
+        </record>
+    </data>
+</odoo>

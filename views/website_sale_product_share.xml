@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--
+        Product page share widget
+        =========================
+        Injected into website_sale.product template via xpath on
+        the product price/add-to-cart area. Renders a "Bagikan &amp;
+        Dapat Poin" card with WA/FB/X/Copy buttons that build URLs:
+            <base_url>/r/<affiliate_code>?p=<product_id>
+
+        If user not logged in: shows a "Masuk untuk dapat poin" link
+        instead of the buttons.
+    -->
+    <record model="ir.ui.view" id="product_share_widget">
+        <field name="name">Warung Lakku: Product Affiliate Share</field>
+        <field name="key">theme_warunglakku_loyalty.product_share_widget</field>
+        <field name="type">qweb</field>
+        <field name="inherit_id" ref="website_sale.product"/>
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//div[@id='product_details']" position="inside">
+                    <t t-set="wl_code" t-value="wl_affiliate_code or ''"/>
+                    <t t-set="wl_pid" t-value="product.id if product else 0"/>
+                    <t t-set="wl_share_url" t-value="(wl_base_url or '') + '/aff/' + wl_code + '?p=' + str(wl_pid) if wl_code else ''"/>
+                    <div class="wl_aff_share" t-att-data-affiliate-code="wl_code"
+                         t-att-data-share-url="wl_share_url"
+                         t-att-data-product-id="wl_pid"
+                         t-att-data-product-name="product.name if product else ''">
+                        <div class="wl_aff_share_header">
+                            <i class="fa fa-share-alt"/>
+                            <span>Bagikan &amp; Dapat Poin</span>
+                        </div>
+                        <t t-if="wl_code">
+                            <div class="wl_aff_share_body">
+                                <p class="wl_aff_share_hint">
+                                    Bagikan link ini ke WhatsApp, IG,
+                                    atau X. Setiap pembelian yang
+                                    datang dari link Anda =
+                                    <strong>+50 poin</strong>.
+                                </p>
+                                <div class="wl_aff_share_buttons">
+                                    <a t-attf-href="https://wa.me/?text={{ (wl_share_url and (product.name + ' - Warung Lakku%0A%0ACek produk ini: ' + wl_share_url)) or '' }}"
+                                       target="_blank" rel="noopener"
+                                       class="wl_aff_share_btn wl_aff_share_wa"
+                                       title="Bagikan ke WhatsApp">
+                                        <i class="fa fa-whatsapp"/>
+                                        <span>WhatsApp</span>
+                                    </a>
+                                    <a t-attf-href="https://www.facebook.com/sharer/sharer.php?u={{ wl_share_url or '' }}"
+                                       target="_blank" rel="noopener"
+                                       class="wl_aff_share_btn wl_aff_share_fb"
+                                       title="Bagikan ke Facebook">
+                                        <i class="fa fa-facebook"/>
+                                        <span>Facebook</span>
+                                    </a>
+                                    <a t-attf-href="https://twitter.com/intent/tweet?text={{ (product.name + ' - Warung Lakku') if product else '' }}&amp;url={{ wl_share_url or '' }}"
+                                       target="_blank" rel="noopener"
+                                       class="wl_aff_share_btn wl_aff_share_x"
+                                       title="Bagikan ke X (Twitter)">
+                                        <i class="fa fa-x-twitter"/>
+                                        <span>X</span>
+                                    </a>
+                                    <button type="button"
+                                        class="wl_aff_share_btn wl_aff_share_copy"
+                                        t-att-data-clipboard-text="wl_share_url"
+                                        title="Salin link">
+                                        <i class="fa fa-copy"/>
+                                        <span>Salin</span>
+                                    </button>
+                                </div>
+                                <div class="wl_aff_share_link_wrap">
+                                    <input type="text" readonly="readonly"
+                                        class="wl_aff_share_link_input"
+                                        t-att-value="wl_share_url"
+                                        onclick="this.select();"/>
+                                </div>
+                            </div>
+                        </t>
+                        <t t-else="">
+                            <div class="wl_aff_share_body">
+                                <p class="wl_aff_share_login">
+                                    <i class="fa fa-lock"/>
+                                    <a t-attf-href="/web/login?redirect={{ request.httprequest.path }}">Masuk</a>
+                                    untuk dapat link affiliate
+                                    pribadi dan kumpulkan poin dari
+                                    setiap pembelian yang Anda rujuk.
+                                </p>
+                            </div>
+                        </t>
+                    </div>
+                </xpath>
+            </data>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Show loyalty_points + affiliate_code on partner form -->
+    <record id="view_partner_form_loyalty" model="ir.ui.view">
+        <field name="name">res.partner.form.loyalty</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//notebook" position="inside">
+                    <page string="Loyalty &amp; Affiliate" name="wl_loyalty">
+                        <group>
+                            <group string="Loyalty Points">
+                                <field name="loyalty_points"/>
+                            </group>
+                            <group string="Affiliate">
+                                <field name="affiliate_code"/>
+                                <button name="ensure_affiliate_code"
+                                        type="object"
+                                        string="Generate Code"
+                                        invisible="affiliate_code"
+                                        class="btn-secondary"/>
+                            </group>
+                        </group>
+                        <group string="Affiliate Stats">
+                            <group>
+                                <field name="affiliate_click_count"/>
+                                <field name="affiliate_order_count"/>
+                            </group>
+                            <group>
+                                <field name="affiliate_commission_total"/>
+                            </group>
+                        </group>
+                    </page>
+                </xpath>
+            </data>
+        </field>
+    </record>
+
+</odoo>

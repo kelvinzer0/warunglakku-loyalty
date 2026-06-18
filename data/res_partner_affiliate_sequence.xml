@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!--
+            Reserved sequence for affiliate codes. We don't actually
+            use ir.sequence for code generation (res_partner.py uses
+            random.choices() with a collision check), but keeping this
+            here so future migrations to ir.sequence are easy.
+        -->
+        <record id="seq_wl_affiliate_code" model="ir.sequence">
+            <field name="name">Warung Lakku Affiliate Code</field>
+            <field name="code">wl.affiliate.code</field>
+            <field name="prefix">WL</field>
+            <field name="suffix"></field>
+            <field name="padding">6</field>
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
+        </record>
+    </data>
+</odoo>

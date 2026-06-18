@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <!-- 4 default voucher tiers, as requested by user -->
+        <record id="voucher_tier_20k" model="wl.loyalty.voucher.tier">
+            <field name="name">Voucher Rp 20.000</field>
+            <field name="voucher_value">20000</field>
+            <field name="point_cost">200</field>
+            <field name="active" eval="True"/>
+        </record>
+        <record id="voucher_tier_30k" model="wl.loyalty.voucher.tier">
+            <field name="name">Voucher Rp 30.000</field>
+            <field name="voucher_value">30000</field>
+            <field name="point_cost">300</field>
+            <field name="active" eval="True"/>
+        </record>
+        <record id="voucher_tier_50k" model="wl.loyalty.voucher.tier">
+            <field name="name">Voucher Rp 50.000</field>
+            <field name="voucher_value">50000</field>
+            <field name="point_cost">500</field>
+            <field name="active" eval="True"/>
+        </record>
+        <record id="voucher_tier_100k" model="wl.loyalty.voucher.tier">
+            <field name="name">Voucher Rp 100.000</field>
+            <field name="voucher_value">100000</field>
+            <field name="point_cost">1000</field>
+            <field name="active" eval="True"/>
+        </record>
+    </data>
+</odoo>

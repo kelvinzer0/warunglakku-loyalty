@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="res_config_settings_view_form_loyalty" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.loyalty</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//form[1]" position="inside">
+                    <app data-string="Loyalty &amp; Affiliate"
+                         string="Loyalty &amp; Affiliate"
+                         name="warunglakku_loyalty_config"
+                         groups="sales_team.group_sale_manager">
+                        <field name="wl_default_commission_points"/>
+                        <field name="wl_affiliate_cookie_days"/>
+                        <field name="wl_affiliate_base_url"/>
+                    </app>
+                </xpath>
+            </data>
+        </field>
+    </record>
+
+</odoo>

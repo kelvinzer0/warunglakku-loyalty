@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Voucher Tier: list + form -->
+    <record id="view_wl_loyalty_voucher_tier_tree" model="ir.ui.view">
+        <field name="name">wl.loyalty.voucher.tier.list</field>
+        <field name="model">wl.loyalty.voucher.tier</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="voucher_value"/>
+                <field name="point_cost"/>
+                <field name="exchange_count"/>
+                <field name="active" widget="boolean_toggle"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_wl_loyalty_voucher_tier_form" model="ir.ui.view">
+        <field name="name">wl.loyalty.voucher.tier.form</field>
+        <field name="model">wl.loyalty.voucher.tier</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <widget name="web_ribbon" title="Archived"
+                        bg_color="text-bg-danger"
+                        invisible="not active"/>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="e.g. Voucher Rp 20.000"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="voucher_value"/>
+                            <field name="point_cost"/>
+                        </group>
+                        <group>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="active"/>
+                            <field name="exchange_count"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_wl_loyalty_voucher_tier" model="ir.actions.act_window">
+        <field name="name">Voucher Tiers</field>
+        <field name="res_model">wl.loyalty.voucher.tier</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Exchange: list + form -->
+    <record id="view_wl_loyalty_exchange_tree" model="ir.ui.view">
+        <field name="name">wl.loyalty.exchange.list</field>
+        <field name="model">wl.loyalty.exchange</field>
+        <field name="arch" type="xml">
+            <tree decoration-success="state=='issued'"
+                  decoration-muted="state in ('used','void')">
+                <field name="create_date"/>
+                <field name="partner_id"/>
+                <field name="voucher_tier_id"/>
+                <field name="voucher_value" sum="Total Value"/>
+                <field name="point_cost" sum="Total Points Spent"/>
+                <field name="voucher_code"/>
+                <field name="state" widget="badge"
+                       decoration-success="state=='issued'"
+                       decoration-info="state=='used'"
+                       decoration-danger="state=='void'"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_wl_loyalty_exchange_form" model="ir.ui.view">
+        <field name="name">wl.loyalty.exchange.form</field>
+        <field name="model">wl.loyalty.exchange</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_mark_used" type="object"
+                            string="Mark as Used"
+                            invisible="state != 'issued'"
+                            class="btn-primary"/>
+                    <button name="action_void" type="object"
+                            string="Void (Refund Points)"
+                            invisible="state not in ('issued','used')"
+                            class="btn-danger"
+                            confirm="Are you sure? Points will be refunded to the customer."/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="issued,used"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_mark_used" type="object"
+                                invisible="state != 'issued'"
+                                class="oe_stat_button" icon="fa-check">
+                            <div class="o_stat_info">
+                                <span class="o_stat_text">Mark Used</span>
+                            </div>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="voucher_code"/>
+                        <h1><field name="voucher_code"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="partner_id"/>
+                            <field name="voucher_tier_id"/>
+                        </group>
+                        <group>
+                            <field name="voucher_value"/>
+                            <field name="point_cost"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <group string="Notes">
+                        <field name="notes" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_wl_loyalty_exchange" model="ir.actions.act_window">
+        <field name="name">Voucher Exchanges</field>
+        <field name="res_model">wl.loyalty.exchange</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_groupby_partner': 1}</field>
+    </record>
+
+    <!-- Affiliate Click: list (read-only) -->
+    <record id="view_wl_affiliate_click_tree" model="ir.ui.view">
+        <field name="name">wl.affiliate.click.list</field>
+        <field name="model">wl.affiliate.click</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="create_date"/>
+                <field name="affiliate_partner_id"/>
+                <field name="affiliate_code"/>
+                <field name="product_id"/>
+                <field name="ip_address"/>
+                <field name="converted_order_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_wl_affiliate_click_form" model="ir.ui.view">
+        <field name="name">wl.affiliate.click.form</field>
+        <field name="model">wl.affiliate.click</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="affiliate_partner_id"/>
+                            <field name="affiliate_code"/>
+                            <field name="product_id"/>
+                            <field name="product_template_id"/>
+                        </group>
+                        <group>
+                            <field name="ip_address"/>
+                            <field name="user_agent"/>
+                            <field name="referer"/>
+                            <field name="converted_order_id"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_wl_affiliate_click" model="ir.actions.act_window">
+        <field name="name">Affiliate Clicks</field>
+        <field name="res_model">wl.affiliate.click</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Affiliate Order: list + form -->
+    <record id="view_wl_affiliate_order_tree" model="ir.ui.view">
+        <field name="name">wl.affiliate.order.list</field>
+        <field name="model">wl.affiliate.order</field>
+        <field name="arch" type="xml">
+            <tree decoration-success="state=='awarded'"
+                  decoration-danger="state in ('cancelled','clawed_back')"
+                  decoration-muted="state=='pending'">
+                <field name="create_date"/>
+                <field name="sale_order_id"/>
+                <field name="affiliate_partner_id"/>
+                <field name="order_amount_total" sum="Total Referred Sales"/>
+                <field name="commission_points" sum="Total Commission"/>
+                <field name="state" widget="badge"
+                       decoration-warning="state=='pending'"
+                       decoration-success="state=='awarded'"
+                       decoration-danger="state in ('cancelled','clawed_back')"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_wl_affiliate_order_form" model="ir.ui.view">
+        <field name="name">wl.affiliate.order.form</field>
+        <field name="model">wl.affiliate.order</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_award" type="object"
+                            string="Award Commission Now"
+                            invisible="state not in ('pending')"
+                            class="btn-primary"/>
+                    <button name="action_cancel" type="object"
+                            string="Cancel (Clawback)"
+                            invisible="state not in ('pending','awarded')"
+                            class="btn-danger"
+                            confirm="Cancel this affiliate order and clawback any awarded points?"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="pending,awarded"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="sale_order_id"/>
+                            <field name="affiliate_partner_id"/>
+                            <field name="click_id"/>
+                        </group>
+                        <group>
+                            <field name="commission_points"/>
+                            <field name="commission_id"/>
+                            <field name="order_amount_total"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <group string="Notes">
+                        <field name="notes" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_wl_affiliate_order" model="ir.actions.act_window">
+        <field name="name">Affiliate Orders</field>
+        <field name="res_model">wl.affiliate.order</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Affiliate Commission: list (audit log) -->
+    <record id="view_wl_affiliate_commission_tree" model="ir.ui.view">
+        <field name="name">wl.affiliate.commission.list</field>
+        <field name="model">wl.affiliate.commission</field>
+        <field name="arch" type="xml">
+            <tree decoration-success="state=='active'"
+                  decoration-danger="state=='clawed_back'">
+                <field name="create_date"/>
+                <field name="affiliate_partner_id"/>
+                <field name="sale_order_id"/>
+                <field name="points" sum="Total Points Awarded"/>
+                <field name="reason"/>
+                <field name="state" widget="badge"
+                       decoration-success="state=='active'"
+                       decoration-danger="state=='clawed_back'"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_wl_affiliate_commission" model="ir.actions.act_window">
+        <field name="name">Affiliate Commissions</field>
+        <field name="res_model">wl.affiliate.commission</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- ===== Root menu ===== -->
+    <menuitem id="menu_warunglakku_loyalty_root"
+              name="Loyalty &amp; Affiliate"
+              web_icon="warunglakku_loyalty,static/description/icon.png"
+              sequence="80"/>
+
+    <menuitem id="menu_warunglakku_loyalty_vouchers"
+              name="Vouchers"
+              parent="menu_warunglakku_loyalty_root"
+              sequence="10"/>
+
+    <menuitem id="menu_warunglakku_loyalty_voucher_tiers"
+              name="Voucher Tiers"
+              parent="menu_warunglakku_loyalty_vouchers"
+              action="action_wl_loyalty_voucher_tier"
+              sequence="10"/>
+
+    <menuitem id="menu_warunglakku_loyalty_exchanges"
+              name="Exchanges"
+              parent="menu_warunglakku_loyalty_vouchers"
+              action="action_wl_loyalty_exchange"
+              sequence="20"/>
+
+    <menuitem id="menu_warunglakku_loyalty_affiliate"
+              name="Affiliate"
+              parent="menu_warunglakku_loyalty_root"
+              sequence="20"/>
+
+    <menuitem id="menu_warunglakku_loyalty_affiliate_clicks"
+              name="Click Log"
+              parent="menu_warunglakku_loyalty_affiliate"
+              action="action_wl_affiliate_click"
+              sequence="10"/>
+
+    <menuitem id="menu_warunglakku_loyalty_affiliate_orders"
+              name="Order Log"
+              parent="menu_warunglakku_loyalty_affiliate"
+              action="action_wl_affiliate_order"
+              sequence="20"/>
+
+    <menuitem id="menu_warunglakku_loyalty_affiliate_commissions"
+              name="Commission Log"
+              parent="menu_warunglakku_loyalty_affiliate"
+              action="action_wl_affiliate_commission"
+              sequence="30"/>
+
+</odoo>

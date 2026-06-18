@@ -1,0 +1,16 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_wl_loyalty_voucher_tier_user,wl.loyalty.voucher.tier user,model_wl_loyalty_voucher_tier,base.group_portal,1,0,0,0
+access_wl_loyalty_voucher_tier_salesman,wl.loyalty.voucher.tier salesman,model_wl_loyalty_voucher_tier,sales_team.group_sale_salesman,1,0,0,0
+access_wl_loyalty_voucher_tier_manager,wl.loyalty.voucher.tier manager,model_wl_loyalty_voucher_tier,sales_team.group_sale_manager,1,1,1,1
+access_wl_loyalty_exchange_user,wl.loyalty.exchange user (own),model_wl_loyalty_exchange,base.group_portal,1,1,1,0
+access_wl_loyalty_exchange_salesman,wl.loyalty.exchange salesman,model_wl_loyalty_exchange,sales_team.group_sale_salesman,1,1,1,0
+access_wl_loyalty_exchange_manager,wl.loyalty.exchange manager,model_wl_loyalty_exchange,sales_team.group_sale_manager,1,1,1,1
+access_wl_affiliate_click_user,wl.affiliate.click user (own),model_wl_affiliate_click,base.group_portal,1,0,0,0
+access_wl_affiliate_click_salesman,wl.affiliate.click salesman,model_wl_affiliate_click,sales_team.group_sale_salesman,1,0,0,0
+access_wl_affiliate_click_manager,wl.affiliate.click manager,model_wl_affiliate_click,sales_team.group_sale_manager,1,1,1,1
+access_wl_affiliate_order_user,wl.affiliate.order user (own),model_wl_affiliate_order,base.group_portal,1,0,0,0
+access_wl_affiliate_order_salesman,wl.affiliate.order salesman,model_wl_affiliate_order,sales_team.group_sale_salesman,1,0,0,0
+access_wl_affiliate_order_manager,wl.affiliate.order manager,model_wl_affiliate_order,sales_team.group_sale_manager,1,1,1,1
+access_wl_affiliate_commission_user,wl.affiliate.commission user (own),model_wl_affiliate_commission,base.group_portal,1,0,0,0
+access_wl_affiliate_commission_salesman,wl.affiliate.commission salesman,model_wl_affiliate_commission,sales_team.group_sale_salesman,1,0,0,0
+access_wl_affiliate_commission_manager,wl.affiliate.commission manager,model_wl_affiliate_commission,sales_team.group_sale_manager,1,1,1,1

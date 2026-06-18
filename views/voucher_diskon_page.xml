@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--
+        /voucher-diskon page template
+        =============================
+        Rendered by warunglakku_loyalty.voucher_diskon_page controller.
+
+        Layout:
+          1. Page header (maroon gradient band) with title + tagline
+          2. Two-column responsive grid:
+             LEFT:  "Cara Mendapatkan Poin" guide
+                    - Partner's affiliate code (if logged in)
+                    - 3-step explanation
+                    - Recent commission history (if logged in)
+             RIGHT: Voucher tier grid (4 tiers)
+                    - Each card: voucher value, point cost,
+                      exchange button (or "Login" CTA)
+                    - "Tukar" button disabled if insufficient points
+          3. Recent exchanges table (if any)
+          4. FAQ-style help section
+
+        Empty/error states:
+          - Not logged in:  right column shows "Masuk untuk mulai
+                            menukar poin" CTA instead of buttons
+          - Insufficient:   button disabled + helper text
+          - Exchange flash: green toast showing new voucher_code
+    -->
+    <template id="voucher_diskon_page" name="Warung Lakku: Voucher Diskon">
+        <t t-call="website.layout">
+            <t t-set="additional_title">Voucher Diskon</t>
+
+            <div id="wrap" class="wl_voucher_page">
+                <!-- ===== Header band ===== -->
+                <section class="wl_voucher_header">
+                    <div class="container">
+                        <div class="wl_voucher_header_inner">
+                            <div class="wl_voucher_header_text">
+                                <span class="wl_voucher_eyebrow">
+                                    <i class="fa fa-ticket"/>
+                                    Program Loyalitas
+                                </span>
+                                <h1>Voucher Diskon</h1>
+                                <p>
+                                    Kumpulkan poin dengan membagikan
+                                    produk ke sosial media. Setiap
+                                    pembelian yang datang dari link
+                                    affiliate Anda = poin. Tukarkan
+                                    poin dengan voucher diskon di
+                                    bawah ini.
+                                </p>
+                            </div>
+                            <div class="wl_voucher_balance">
+                                <t t-if="is_logged_in">
+                                    <div class="wl_voucher_balance_label">
+                                        Poin Anda
+                                    </div>
+                                    <div class="wl_voucher_balance_value">
+                                        <t t-esc="partner.loyalty_points or 0"/>
+                                        <span class="wl_voucher_balance_unit">poin</span>
+                                    </div>
+                                </t>
+                                <t t-else="">
+                                    <div class="wl_voucher_balance_label">
+                                        Belum Login
+                                    </div>
+                                    <a t-attf-href="/web/login?redirect=/voucher-diskon"
+                                       class="wl_voucher_login_btn">
+                                        <i class="fa fa-sign-in"/>
+                                        Masuk untuk lihat poin
+                                    </a>
+                                </t>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ===== Flash messages ===== -->
+                <t t-if="exchanged">
+                    <div class="container">
+                        <div class="wl_voucher_flash wl_voucher_flash_success">
+                            <div class="wl_voucher_flash_icon">
+                                <i class="fa fa-check-circle"/>
+                            </div>
+                            <div class="wl_voucher_flash_body">
+                                <strong>Voucher berhasil ditukar!</strong>
+                                <div class="wl_voucher_flash_code">
+                                    Kode voucher Anda:
+                                    <code t-esc="exchanged.voucher_code"/>
+                                </div>
+                                <small>
+                                    Nilai: Rp <t t-esc="'{:,.0f}'.format(exchanged.voucher_value or 0).replace(',', '.')"/>
+                                    • Poin dipakai: <t t-esc="exchanged.point_cost"/>
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+                <t t-if="error">
+                    <div class="container">
+                        <div class="wl_voucher_flash wl_voucher_flash_error">
+                            <div class="wl_voucher_flash_icon">
+                                <i class="fa fa-exclamation-triangle"/>
+                            </div>
+                            <div class="wl_voucher_flash_body">
+                                <t t-if="error == 'insufficient_points'">
+                                    <strong>Poin tidak cukup.</strong>
+                                    Bagikan produk ke sosial media untuk
+                                    mengumpulkan lebih banyak poin.
+                                </t>
+                                <t t-elif="error == 'invalid_tier'">
+                                    <strong>Voucher tidak valid.</strong>
+                                    Silakan pilih voucher dari daftar.
+                                </t>
+                                <t t-elif="error == 'server_error'">
+                                    <strong>Terjadi kesalahan.</strong>
+                                    Silakan coba beberapa saat lagi.
+                                </t>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+
+                <!-- ===== Main content ===== -->
+                <div class="container wl_voucher_main">
+                    <div class="row">
+
+                        <!-- ===== LEFT: How to earn points ===== -->
+                        <div class="col-lg-5">
+                            <section class="wl_voucher_section">
+                                <h2 class="wl_voucher_section_title">
+                                    <i class="fa fa-bullhorn"/>
+                                    Cara Mendapatkan Poin
+                                </h2>
+
+                                <ol class="wl_voucher_steps">
+                                    <li>
+                                        <div class="wl_voucher_step_num">1</div>
+                                        <div class="wl_voucher_step_body">
+                                            <strong>Buka halaman produk</strong>
+                                            <p>
+                                                Pilih produk apa pun di
+                                                <a href="/shop">toko</a>,
+                                                lalu lihat kotak
+                                                <em>"Bagikan &amp; Dapat Poin"</em>
+                                                di halaman tersebut.
+                                            </p>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="wl_voucher_step_num">2</div>
+                                        <div class="wl_voucher_step_body">
+                                            <strong>Bagikan link affiliate</strong>
+                                            <p>
+                                                Klik tombol WhatsApp,
+                                                Facebook, atau X. Link
+                                                yang dibagikan otomatis
+                                                berisi kode affiliate Anda.
+                                            </p>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="wl_voucher_step_num">3</div>
+                                        <div class="wl_voucher_step_body">
+                                            <strong>Teman belanja = Anda dapat poin</strong>
+                                            <p>
+                                                Setiap pembelian yang
+                                                datang dari link Anda
+                                                memberi Anda poin.
+                                                Poin masuk otomatis saat
+                                                pesanan teman dikonfirmasi.
+                                            </p>
+                                        </div>
+                                    </li>
+                                </ol>
+
+                                <t t-if="is_logged_in">
+                                    <div class="wl_affiliate_code_box">
+                                        <div class="wl_affiliate_code_label">
+                                            Kode Affiliate Anda
+                                        </div>
+                                        <div class="wl_affiliate_code_value">
+                                            <code t-esc="partner.affiliate_code or '-'"/>
+                                        </div>
+                                        <div class="wl_affiliate_code_url">
+                                            <t t-esc="base_url"/>
+                                            /aff/<t t-esc="partner.affiliate_code or ''"/>?p=&lt;id_produk&gt;
+                                        </div>
+                                        <small>
+                                            Bagikan link ini di status
+                                            WA, story IG, atau tweet.
+                                            Klik akan otomatis tercatat.
+                                        </small>
+                                    </div>
+
+                                    <t t-if="recent_commissions">
+                                        <div class="wl_recent_comm">
+                                            <h3 class="wl_recent_comm_title">
+                                                <i class="fa fa-history"/>
+                                                Riwayat Poin Terakhir
+                                            </h3>
+                                            <ul>
+                                                <t t-foreach="recent_commissions" t-as="c">
+                                                    <li>
+                                                        <span class="wl_comm_points">
+                                                            +<t t-esc="c.points"/> poin
+                                                        </span>
+                                                        <span class="wl_comm_reason" t-esc="c.reason or ''"/>
+                                                        <span class="wl_comm_date" t-esc="c.create_date"/>
+                                                    </li>
+                                                </t>
+                                            </ul>
+                                        </div>
+                                    </t>
+                                </t>
+                                <t t-else="">
+                                    <div class="wl_login_cta">
+                                        <i class="fa fa-lock"/>
+                                        <p>
+                                            <a t-attf-href="/web/login?redirect=/voucher-diskon">Masuk</a>
+                                            untuk mendapatkan kode
+                                            affiliate pribadi Anda dan
+                                            mulai mengumpulkan poin.
+                                        </p>
+                                    </div>
+                                </t>
+                            </section>
+                        </div>
+
+                        <!-- ===== RIGHT: Voucher tiers ===== -->
+                        <div class="col-lg-7">
+                            <section class="wl_voucher_section">
+                                <h2 class="wl_voucher_section_title">
+                                    <i class="fa fa-ticket"/>
+                                    Tukar Poin dengan Voucher
+                                </h2>
+
+                                <div class="wl_tiers_grid">
+                                    <t t-foreach="tiers" t-as="tier">
+                                        <div t-att-class="'wl_tier_card' + (' wl_tier_disabled' if (not is_logged_in or (partner.loyalty_points or 0) &lt; tier.point_cost) else '')">
+                                            <div class="wl_tier_value">
+                                                <span class="wl_tier_currency">Rp</span>
+                                                <span class="wl_tier_amount" t-esc="'{:,.0f}'.format(tier.voucher_value or 0).replace(',', '.')"/>
+                                            </div>
+                                            <div class="wl_tier_cost">
+                                                <i class="fa fa-star-o"/>
+                                                <t t-esc="tier.point_cost"/> poin
+                                            </div>
+                                            <form t-att-action="'/voucher-diskon/exchange'" method="post">
+                                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                                <input type="hidden" name="tier_id" t-att-value="tier.id"/>
+                                                <t t-if="is_logged_in">
+                                                    <button type="submit"
+                                                        t-att-disabled="(partner.loyalty_points or 0) &lt; tier.point_cost"
+                                                        class="wl_tier_btn">
+                                                        <t t-if="(partner.loyalty_points or 0) &gt;= tier.point_cost">
+                                                            <i class="fa fa-exchange"/>
+                                                            Tukar Sekarang
+                                                        </t>
+                                                        <t t-else="">
+                                                            <i class="fa fa-lock"/>
+                                                            Butuh <t t-esc="tier.point_cost - (partner.loyalty_points or 0)"/> poin lagi
+                                                        </t>
+                                                    </button>
+                                                </t>
+                                                <t t-else="">
+                                                    <a t-attf-href="/web/login?redirect=/voucher-diskon"
+                                                       class="wl_tier_btn wl_tier_btn_login">
+                                                        <i class="fa fa-sign-in"/>
+                                                        Masuk untuk Tukar
+                                                    </a>
+                                                </t>
+                                            </form>
+                                        </div>
+                                    </t>
+                                </div>
+
+                                <t t-if="is_logged_in and recent_exchanges">
+                                    <div class="wl_recent_exchanges">
+                                        <h3 class="wl_recent_exchanges_title">
+                                            <i class="fa fa-history"/>
+                                            Voucher Anda Terakhir
+                                        </h3>
+                                        <table class="wl_exchanges_table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Kode Voucher</th>
+                                                    <th>Nilai</th>
+                                                    <th>Poin Dipakai</th>
+                                                    <th>Tanggal</th>
+                                                    <th>Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <t t-foreach="recent_exchanges" t-as="ex">
+                                                    <tr>
+                                                        <td><code t-esc="ex.voucher_code"/></td>
+                                                        <td>Rp <t t-esc="'{:,.0f}'.format(ex.voucher_value or 0).replace(',', '.')"/></td>
+                                                        <td><t t-esc="ex.point_cost"/></td>
+                                                        <td><t t-esc="ex.create_date"/></td>
+                                                        <td>
+                                                            <t t-if="ex.state == 'issued'">
+                                                                <span class="wl_state wl_state_issued">Aktif</span>
+                                                            </t>
+                                                            <t t-elif="ex.state == 'used'">
+                                                                <span class="wl_state wl_state_used">Dipakai</span>
+                                                            </t>
+                                                            <t t-elif="ex.state == 'void'">
+                                                                <span class="wl_state wl_state_void">Dibatalkan</span>
+                                                            </t>
+                                                            <t t-else="">
+                                                                <span class="wl_state" t-esc="ex.state"/>
+                                                            </t>
+                                                        </td>
+                                                    </tr>
+                                                </t>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </t>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+</odoo>
