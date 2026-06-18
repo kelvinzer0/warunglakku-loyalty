@@ -37,8 +37,8 @@
                                 <p class="wl_aff_share_hint">
                                     Bagikan link ini ke WhatsApp, IG,
                                     atau X. Setiap pembelian yang
-                                    datang dari link Anda =
-                                    <strong>+50 poin</strong>.
+                                    datang dari link Anda otomatis
+                                    menambah <strong>poin Anda</strong>.
                                 </p>
                                 <div class="wl_aff_share_buttons">
                                     <a t-attf-href="https://wa.me/?text={{ (wl_share_url and (product.name + ' - Warung Lakku%0A%0ACek produk ini: ' + wl_share_url)) or '' }}"

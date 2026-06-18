@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Warung Lakku Loyalty & Affiliate',
-    'version': '17.0.1.0.0',
+    'version': '17.0.1.1.0',
     'category': 'Website/Website',
     'summary': 'Point-to-voucher exchange + simple share-to-sosmed affiliate system (click log, order log, commission log)',
     'description': """
@@ -45,9 +45,20 @@ Flow:
        - sets sale.order.affiliate_partner_id
        - creates wl.affiliate.order (state=pending)
   5. Order confirmed:
-       - +N points to affiliate partner (default 50, configurable)
+       - commission_points computed as:
+           floor( order_total * commission_rate% / 100 / points_per_rupiah )
+         Default config: 1% rate, 100 Rp per point.
+         Example: order Rp 10.000 -> 1% = Rp 100 -> 1 point.
+         Order Rp 2.000.000 -> 1% = Rp 20.000 -> 200 points
+         (exactly enough to redeem the Rp 20.000 voucher).
+       - +N points to affiliate partner
        - wl.affiliate.commission record created
        - wl.affiliate.order state=awarded
+
+   The commission rate is silent (not displayed to the buyer).
+   The affiliate sees the points credit in their /voucher-diskon
+   dashboard. Nominal points-per-order is intentionally not
+   advertised on the product page (only "poin otomatis masuk").
   6. Partner returns to /voucher-diskon, sees updated balance,
      can exchange for voucher.
 """,

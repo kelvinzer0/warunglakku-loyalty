@@ -12,9 +12,73 @@
                          string="Loyalty &amp; Affiliate"
                          name="warunglakku_loyalty_config"
                          groups="sales_team.group_sale_manager">
-                        <field name="wl_default_commission_points"/>
-                        <field name="wl_affiliate_cookie_days"/>
-                        <field name="wl_affiliate_base_url"/>
+
+                        <h2>Komisi Affiliate</h2>
+                        <div class="row mt16 o_settings_container">
+                            <div class="col-12 col-lg-6 o_setting_box">
+                                <div class="o_setting_right_pane">
+                                    <label for="wl_commission_rate_percent"/>
+                                    <div class="text-muted">
+                                        Persentase komisi dari nilai penjualan
+                                        yang dikonversi menjadi poin untuk
+                                        affiliate. Contoh: 1.0 = 1% dari total
+                                        order. Order Rp 10.000 × 1% = Rp 100
+                                        komisi.
+                                    </div>
+                                    <field name="wl_commission_rate_percent"/>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-6 o_setting_box">
+                                <div class="o_setting_right_pane">
+                                    <label for="wl_points_per_rupiah"/>
+                                    <div class="text-muted">
+                                        Berapa rupiah komisi = 1 poin.
+                                        Contoh: 100 = Rp 100 komisi menjadi
+                                        1 poin. Order Rp 10.000 × 1% = Rp 100
+                                        = 1 poin untuk affiliate.
+                                    </div>
+                                    <field name="wl_points_per_rupiah"/>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-6 o_setting_box">
+                                <div class="o_setting_right_pane">
+                                    <label for="wl_default_commission_points"/>
+                                    <div class="text-muted">
+                                        [LEGACY] Hanya dipakai sebagai fallback
+                                        ketika record affiliate order dibuat
+                                        tanpa sale.order terkait (entry manual
+                                        admin).
+                                    </div>
+                                    <field name="wl_default_commission_points"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h2>Konfigurasi Affiliate Link</h2>
+                        <div class="row mt16 o_settings_container">
+                            <div class="col-12 col-lg-6 o_setting_box">
+                                <div class="o_setting_right_pane">
+                                    <label for="wl_affiliate_cookie_days"/>
+                                    <div class="text-muted">
+                                        Berapa hari cookie <code>wl_aff_code</code>
+                                        bertahan di browser pengunjung setelah
+                                        klik link affiliate.
+                                    </div>
+                                    <field name="wl_affiliate_cookie_days"/>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-6 o_setting_box">
+                                <div class="o_setting_right_pane">
+                                    <label for="wl_affiliate_base_url"/>
+                                    <div class="text-muted">
+                                        Base URL publik untuk link affiliate.
+                                        Harus sama dengan domain Odoo produksi.
+                                    </div>
+                                    <field name="wl_affiliate_base_url"/>
+                                </div>
+                            </div>
+                        </div>
+
                     </app>
                 </xpath>
             </data>
